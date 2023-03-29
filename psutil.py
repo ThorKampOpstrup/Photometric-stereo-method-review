@@ -119,11 +119,14 @@ def disp_normalmap(normal=None, height=None, width=None, delay=0, name=None):
     N = (N + 1.0) / 2.0  # Rescale
     if name is None:
         name = 'normal map'
-    cv2.destroyAllWindows()
-    cv2.imshow(name, N)
+
+    img = N*255
+    cv2.imwrite('normal.png', img)
+    # cv2.destroyAllWindows()
+    # cv2.imshow(name, N)
     # cv2.waitKey(delay)
     # cv2.destroyWindow(name)
-    cv2.waitKey(0)    # to deal with frozen window...
+    # cv2.waitKey(0)    # to deal with frozen window...
 
 
 def save_normalmap_as_npy(filename=None, normal=None, height=None, width=None):
