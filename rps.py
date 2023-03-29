@@ -9,6 +9,7 @@ __version__ = "0.1.0"
 __date__ = "11 May 2018"
 
 import psutil
+import psutil2 
 import rpsnumerics
 import numpy as np
 from sklearn.preprocessing import normalize
@@ -75,6 +76,14 @@ class RPS(object):
         :param foldername: foldername
         """
         self.M, self.height, self.width = psutil.load_npyimages(foldername)
+
+    def load_images_from_folder(self, foldername=None, file_txt=None): # file_txt is the name of the file that contains the list of images
+        """
+        Load images in the folder specified by the "foldername" that have extension "ext"
+        :param foldername: foldername
+        :param file_txt: file_txt
+        """
+        self.M, self.height, self.width = psutil2.load_images_from_folder(foldername, file_txt)
 
     def load_mask(self, filename=None):
         """

@@ -5,58 +5,55 @@ import numpy as np
 import time
 from rps import RPS
 import psutil
+import psutil2
 
 import copy
 
 # Choose a method
 # METHOD = RPS.L2_SOLVER    # Least-squares
-# METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
-METHOD = RPS.SBL_SOLVER_MULTICORE    # Sparse Bayesian Learning
+METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
+# METHOD = RPS.SBL_SOLVER_MULTICORE    # Sparse Bayesian Learning
 # METHOD = RPS.RPCA_SOLVER    # Robust PCA
 
 # Choose a dataset
 # DATA_FOLDERNAME = './data/bunny/bunny_specular/'    # Specular with cast shadow
-DATA_FOLDERNAME = './data/bunny/bunny_lambert/'    # Lambertian diffuse with cast shadow
+# DATA_FOLDERNAME = './data/bunny/bunny_lambert/'    # Lambertian diffuse with cast shadow
 # DATA_FOLDERNAME = './data/bunny/bunny_lambert_noshadow/'    # Lambertian diffuse without cast shadow
 # DATA_FOLDERNAME = './data/bunny/3images/'    # small sample set
 
-LIGHT_FILENAME = './data/bunny/lights.npy'
-MASK_FILENAME = './data/bunny/mask.png'
-GT_NORMAL_FILENAME = './data/bunny/gt_normal.npy'
+# LIGHT_FILENAME = './data/bunny/lights.npy'
+# MASK_FILENAME = './data/bunny/mask.png'
+# GT_NORMAL_FILENAME = './data/bunny/gt_normal.npy'
 
-#BUDDHA
-# DATA_FOLDERNAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/buddhaPNG/images/'
-# LIGHT_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/buddhaPNG/light_directions.txt'
-# MASK_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/buddhaPNG/mask.png'
-# GT_NORMAL_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/buddhaPNG/Normal_gt.png'
+#PATHS FOR DILIGENT
 
-#READING
-# DATA_FOLDERNAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/images/'
-# LIGHT_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/light_directions.txt'
-# MASK_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/mask.png'
-# GT_NORMAL_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/Normal_gt.png'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/bearPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/buddhaPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/catPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/cowPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/gobletPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/harvestPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/pot1PNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/pot2PNG/'
+FOLDER_PATH = 'data/DiLiGenT/pmsData/readingPNG/'
 
-#READING
-# DATA_FOLDERNAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/images3/'
-# LIGHT_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/light_directions3.txt'
-# MASK_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/mask.png'
-# GT_NORMAL_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData_crop/readingPNG/Normal_gt.png'
+##GENERAL LIST
+LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
+FILE_NAMES_TXT = FOLDER_PATH+'filenames.txt'
+GT_NORMAL_FILENAME = FOLDER_PATH+'Normal_gt.png'
+MASK_FILENAME = FOLDER_PATH+'mask.png'
 
-#CAT3
-# DATA_FOLDERNAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData/catPNG/images3/'
-# LIGHT_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData/catPNG/light_directions3.txt'
-# MASK_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData/catPNG/mask.png'
-# GT_NORMAL_FILENAME = '/home/thor/Documents/8.Semester/Project/SDPS-Net/data/datasets/DiLiGenT/pmsData/catPNG/Normal_gt.png'
-
-
+psutil2.load_images_from_folder(foldername=FOLDER_PATH, file_txt=FILE_NAMES_TXT)
 
 # Photometric Stereo
 rps = RPS()
 rps.load_mask(filename=MASK_FILENAME)    # Load mask image
-rps.load_lightnpy(filename=LIGHT_FILENAME)    # Load light matrix
-# rps.load_lighttxt(filename=LIGHT_FILENAME)    # Load light matrix
-rps.load_npyimages(foldername=DATA_FOLDERNAME)    # Load observations
+# rps.load_lightnpy(filename=LIGHT_FILENAME)    # Load light matrix
+rps.load_lighttxt(filename=LIGHT_FILENAME)    # Load light matrix
+# rps.load_npyimages(foldername=DATA_FOLDERNAME)    # Load observations
 # rps.load_images(foldername=DATA_FOLDERNAME, ext="png")    # Load observations
+rps.load_images_from_folder(foldername=FOLDER_PATH, file_txt=FILE_NAMES_TXT)    # Load observations
 start = time.time()
 
 print("rps.M.shape: ", rps.M.shape)
@@ -65,8 +62,8 @@ rps.solve(METHOD)    # Compute
 elapsed_time = time.time() - start
 print("Photometric stereo: elapsed_time:{0}".format(elapsed_time) + "[sec]")
 rps.save_normalmap(filename="./est_normal")    # Save the estimated normal map
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
+tmp= copy.deepcopy(rps.N)
+psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
 
 # Evaluate the estimate
 N_gt = psutil.load_normalmap_from_npy(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
