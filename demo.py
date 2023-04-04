@@ -10,8 +10,8 @@ import psutil2
 import copy
 
 # Choose a method
-# METHOD = RPS.L2_SOLVER    # Least-squares
-METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
+METHOD = RPS.L2_SOLVER    # Least-squares
+# METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
 # METHOD = RPS.SBL_SOLVER_MULTICORE    # Sparse Bayesian Learning
 # METHOD = RPS.RPCA_SOLVER    # Robust PCA
 
@@ -27,7 +27,7 @@ METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
 
 #PATHS FOR DILIGENT
 
-# FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
+FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/bearPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/buddhaPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/catPNG/'
@@ -36,7 +36,7 @@ METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/harvestPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/pot1PNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/pot2PNG/'
-FOLDER_PATH = 'data/DiLiGenT/pmsData/readingPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/readingPNG/'
 
 ##GENERAL LIST
 LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
@@ -62,12 +62,12 @@ rps.solve(METHOD)    # Compute
 elapsed_time = time.time() - start
 print("Photometric stereo: elapsed_time:{0}".format(elapsed_time) + "[sec]")
 rps.save_normalmap(filename="./est_normal")    # Save the estimated normal map
-tmp= copy.deepcopy(rps.N)
-psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
+# tmp= copy.deepcopy(rps.N)
+# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
 
 # Evaluate the estimate
-N_gt = psutil.load_normalmap_from_npy(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
-# N_gt = psutil.load_normalmap_from_png(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
+# N_gt = psutil.load_normalmap_from_npy(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
+N_gt = psutil.load_normalmap_from_png(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
 print("N_gt.shape: ", N_gt.shape)
 print("image shape: ", rps.height, rps.width)
 N_gt = np.reshape(N_gt, (rps.height*rps.width, 3))    # reshape as a normal array (p \times 3)
@@ -75,20 +75,8 @@ N_gt = np.reshape(N_gt, (rps.height*rps.width, 3))    # reshape as a normal arra
 angular_err = psutil.evaluate_angular_error(N_gt, rps.N, rps.background_ind)    # compute angular error
 print("Mean angular error [deg]: ", np.mean(angular_err[:]))
 tmp= copy.deepcopy(rps.N)
-psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
-# tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
+psutil.save_normal_map(normal=tmp, height=rps.height, width=rps.width)
+tmp= copy.deepcopy(rps.N)
+psutil.save_difference_map(GT_NORMAL_FILENAME,  est='normal.png', name='diff.png', mask=MASK_FILENAME)
 
 print("done.")

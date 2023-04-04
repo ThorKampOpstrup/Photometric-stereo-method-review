@@ -110,10 +110,10 @@ def disp_normalmap(normal=None, height=None, width=None, delay=0, name=None):
     :param name: display name
     :return: None
     """
-    N=None
+    N = None
     if normal is None:
         raise ValueError("Surface normal `normal` is None")
-    
+
     N = np.reshape(normal, (height, width, 3))  # Reshape to image coordinates
     N[:, :, 0], N[:, :, 2] = N[:, :, 2], N[:, :, 0].copy()  # Swap RGB <-> BGR
     N = (N + 1.0) / 2.0  # Rescale
@@ -121,12 +121,58 @@ def disp_normalmap(normal=None, height=None, width=None, delay=0, name=None):
         name = 'normal map'
 
     img = N*255
-    cv2.imwrite('normal.png', img)
-    # cv2.destroyAllWindows()
-    # cv2.imshow(name, N)
-    # cv2.waitKey(delay)
+    # cv2.imwrite('normal.png', img)
+    cv2.destroyAllWindows()
+    cv2.imshow(name, N)
+    cv2.waitKey(delay)
     # cv2.destroyWindow(name)
-    # cv2.waitKey(0)    # to deal with frozen window...
+    cv2.waitKey(0)    # to deal with frozen window...
+
+
+def save_normal_map(normal=None, height=None, width=None, name=None):
+    """
+    Save normal map as a png image
+    :param normal: array of surface normal (p \times 3)
+    :param height: height of the image (scalar)
+    :param width: width of the image (scalar)
+    :param name: display name
+    :return: None
+    """
+    N = None
+    if normal is None:
+        raise ValueError("Surface normal `normal` is None")
+
+    N = np.reshape(normal, (height, width, 3))  # Reshape to image coordinates
+    N[:, :, 0], N[:, :, 2] = N[:, :, 2], N[:, :, 0].copy()  # Swap RGB <-> BGR
+    N = (N + 1.0) / 2.0  # Rescale
+    if name is None:
+        name = 'normal.png'
+
+    img = N*255
+    cv2.imwrite(name, img)
+
+
+def save_difference_map(gt=None, est=None, mask=None, name=None):
+    if gt is None:
+        raise ValueError("gt is None")
+    if est is None:
+        raise ValueError("est is None")
+    if mask is None:
+        raise ValueError("mask is None")
+    if name is None:
+        name = 'diff.png'
+
+    est_img = cv2.imread(est)
+    gt_img = cv2.imread(gt)
+
+    # subtract the gt from the estimated image
+    mask_img = cv2.imread(mask, cv2.IMREAD_COLOR)
+    mask_img = cv2.cvtColor(mask_img, cv2.COLOR_BGR2GRAY)
+    mask_img = cv2.threshold(mask_img, 0, 255, cv2.THRESH_BINARY)[1]
+
+    diff = cv2.subtract(gt_img, est_img, mask=mask_img)
+    # diff = (diff + 1.0) / 2.0  # Rescale/
+    cv2.imwrite(name, diff)
 
 
 def save_normalmap_as_npy(filename=None, normal=None, height=None, width=None):
@@ -168,8 +214,9 @@ def load_normalmap_from_png(filename=None):
     im = cv2.imread(filename).astype(np.float64)
     if im is None:
         raise ValueError("filename is not found")
-    
+
     return im
+
 
 def evaluate_angular_error(gtnormal=None, normal=None, background=None):
     if gtnormal is None or normal is None:
