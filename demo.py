@@ -27,7 +27,7 @@ METHOD = RPS.L2_SOLVER    # Least-squares
 
 #PATHS FOR DILIGENT
 
-FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
+# FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/bearPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/buddhaPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/catPNG/'
@@ -38,8 +38,18 @@ FOLDER_PATH = 'data/DiLiGenT/pmsData/ballPNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/pot2PNG/'
 # FOLDER_PATH = 'data/DiLiGenT/pmsData/readingPNG/'
 
+##!OWN DATA
+# FOLDER_PATH = 'data/test/mug/'
+# FOLDER_PATH = 'data/test/mouse/'
+# FOLDER_PATH = 'data/test/hand/'
+# FOLDER_PATH = 'data/test/bottle/'
+# FOLDER_PATH = 'data/test/phone/'
+# FOLDER_PATH = 'data/test/peter/'
+FOLDER_PATH = 'data/test/bottle_painted/'
+
 ##GENERAL LIST
-LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
+#! LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
+LIGHT_FILENAME = FOLDER_PATH+'light_positions.txt'
 FILE_NAMES_TXT = FOLDER_PATH+'filenames.txt'
 GT_NORMAL_FILENAME = FOLDER_PATH+'Normal_gt.png'
 MASK_FILENAME = FOLDER_PATH+'mask.png'
@@ -61,9 +71,11 @@ print("rps.L.shape: ", rps.L.shape)
 rps.solve(METHOD)    # Compute
 elapsed_time = time.time() - start
 print("Photometric stereo: elapsed_time:{0}".format(elapsed_time) + "[sec]")
-rps.save_normalmap(filename="./est_normal")    # Save the estimated normal map
+rps.save_normalmap(filename=FOLDER_PATH+"est_normal")    # Save the estimated normal map
 # tmp= copy.deepcopy(rps.N)
-# psutil.disp_normalmap(normal=tmp, height=rps.height, width=rps.width)
+# psutil.disp_normalmap(normal=tmpos.remove(path_to_save_images+"file.txt"), height=rps.height, width=rps.width)
+cv.imwrite("normal_est.png", rps.N)
+print("rps.N.shape: ", rps.N.shape)
 
 # Evaluate the estimate
 # N_gt = psutil.load_normalmap_from_npy(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
@@ -75,8 +87,8 @@ N_gt = np.reshape(N_gt, (rps.height*rps.width, 3))    # reshape as a normal arra
 angular_err = psutil.evaluate_angular_error(N_gt, rps.N, rps.background_ind)    # compute angular error
 print("Mean angular error [deg]: ", np.mean(angular_err[:]))
 tmp= copy.deepcopy(rps.N)
-psutil.save_normal_map(normal=tmp, height=rps.height, width=rps.width)
+psutil.save_normal_map(normal=tmp, height=rps.height, width=rps.width, path=FOLDER_PATH+'est_normal.png')
 tmp= copy.deepcopy(rps.N)
-psutil.save_difference_map(GT_NORMAL_FILENAME,  est='normal.png', name='diff.png', mask=MASK_FILENAME)
+# psutil.save_difference_map(GT_NORMAL_FILENAME,  est='normal.png', name='diff.png', mask=MASK_FILENAME)
 
 print("done.")

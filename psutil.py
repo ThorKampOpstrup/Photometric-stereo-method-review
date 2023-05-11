@@ -129,7 +129,7 @@ def disp_normalmap(normal=None, height=None, width=None, delay=0, name=None):
     cv2.waitKey(0)    # to deal with frozen window...
 
 
-def save_normal_map(normal=None, height=None, width=None, name=None):
+def save_normal_map(normal=None, height=None, width=None, path=None):
     """
     Save normal map as a png image
     :param normal: array of surface normal (p \times 3)
@@ -145,11 +145,12 @@ def save_normal_map(normal=None, height=None, width=None, name=None):
     N = np.reshape(normal, (height, width, 3))  # Reshape to image coordinates
     N[:, :, 0], N[:, :, 2] = N[:, :, 2], N[:, :, 0].copy()  # Swap RGB <-> BGR
     N = (N + 1.0) / 2.0  # Rescale
-    if name is None:
+    if path is None:
         name = 'normal.png'
 
     img = N*255
-    cv2.imwrite(name, img)
+    print("path: ", path)
+    cv2.imwrite(path, img)
 
 
 def save_difference_map(gt=None, est=None, mask=None, name=None):
