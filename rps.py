@@ -114,6 +114,7 @@ class RPS(object):
         """
         psutil.save_normalmap_as_npy(filename=filename, normal=self.N, height=self.height, width=self.width)
 
+
     def solve(self, method=L2_SOLVER):
         if self.M is None:
             raise ValueError("Measurement M is None")

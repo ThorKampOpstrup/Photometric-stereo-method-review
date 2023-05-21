@@ -10,10 +10,10 @@ import psutil2
 import copy
 
 # Choose a method
-METHOD = RPS.L2_SOLVER    # Least-squares
+# METHOD = RPS.L2_SOLVER    # Least-squares
 # METHOD = RPS.L1_SOLVER_MULTICORE    # L1 residual minimization
 # METHOD = RPS.SBL_SOLVER_MULTICORE    # Sparse Bayesian Learning
-# METHOD = RPS.RPCA_SOLVER    # Robust PCA
+METHOD = RPS.RPCA_SOLVER    # Robust PCA
 
 # Choose a dataset
 # DATA_FOLDERNAME = './data/bunny/bunny_specular/'    # Specular with cast shadow
@@ -45,7 +45,13 @@ METHOD = RPS.L2_SOLVER    # Least-squares
 # FOLDER_PATH = 'data/test/bottle/'
 # FOLDER_PATH = 'data/test/phone/'
 # FOLDER_PATH = 'data/test/peter/'
-FOLDER_PATH = 'data/test/bottle_painted/'
+# FOLDER_PATH = 'data/test/bottle_painted/'
+# FOLDER_PATH = 'data/test/large_figure/'
+# FOLDER_PATH = 'data/test/small_half_sphere/'
+# FOLDER_PATH = 'data/test/rod/'
+# FOLDER_PATH = 'data/test/small_head/'
+# FOLDER_PATH = 'data/test/small_head_camera_close/'
+FOLDER_PATH = 'data/test/brick/'
 
 ##GENERAL LIST
 #! LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
