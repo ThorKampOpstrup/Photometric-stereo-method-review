@@ -45,13 +45,25 @@ METHOD = RPS.RPCA_SOLVER    # Robust PCA
 # FOLDER_PATH = 'data/test/bottle/'
 # FOLDER_PATH = 'data/test/phone/'
 # FOLDER_PATH = 'data/test/peter/'
+# FOLDER_PATH = 'data/test/peter2/'
 # FOLDER_PATH = 'data/test/bottle_painted/'
 # FOLDER_PATH = 'data/test/large_figure/'
-# FOLDER_PATH = 'data/test/small_half_sphere/'
+FOLDER_PATH = 'data/test/small_half_sphere/'
 # FOLDER_PATH = 'data/test/rod/'
 # FOLDER_PATH = 'data/test/small_head/'
 # FOLDER_PATH = 'data/test/small_head_camera_close/'
-FOLDER_PATH = 'data/test/brick/'
+# FOLDER_PATH = 'data/test/brick/'
+# FOLDER_PATH = 'data/test/half_sphere_angle_pi_d_4/'
+# FOLDER_PATH = 'data/test/half_sphere_angle_pi_d_8/'
+# FOLDER_PATH = 'data/test/half_sphere_angle_3pi_d_8/'
+# FOLDER_PATH = 'data/test/half_sphere_angle_80deg/'
+# FOLDER_PATH = 'data/test/plane_fibo_n100_d25_min_pi_d_16_max_pi_d_2point5/'
+# FOLDER_PATH = 'data/test/plane_fibo_n100_d15_min_pi_d_16_max_pi_d_2point5/'
+# FOLDER_PATH = 'data/test/viking_fibo/'
+# FOLDER_PATH = 'data/test/plate/'
+# FOLDER_PATH = 'data/test/plate_pi_d_4_and_p_d_2point5/'
+# FOLDER_PATH = 'data/test/murph_dent/'
+# FOLDER_PATH = 'data/test/holy_metal/'
 
 ##GENERAL LIST
 #! LIGHT_FILENAME = FOLDER_PATH+'light_directions.txt'
@@ -60,7 +72,7 @@ FILE_NAMES_TXT = FOLDER_PATH+'filenames.txt'
 GT_NORMAL_FILENAME = FOLDER_PATH+'Normal_gt.png'
 MASK_FILENAME = FOLDER_PATH+'mask.png'
 
-psutil2.load_images_from_folder(foldername=FOLDER_PATH, file_txt=FILE_NAMES_TXT)
+# psutil2.load_images_from_folder(foldername=FOLDER_PATH, file_txt=FILE_NAMES_TXT)
 
 # Photometric Stereo
 rps = RPS()
@@ -87,7 +99,7 @@ print("rps.N.shape: ", rps.N.shape)
 # N_gt = psutil.load_normalmap_from_npy(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
 N_gt = psutil.load_normalmap_from_png(filename=GT_NORMAL_FILENAME)    # read out the ground truth surface normal
 print("N_gt.shape: ", N_gt.shape)
-print("image shape: ", rps.height, rps.width)
+print("rps.N, shape: ", rps.N.shape)
 N_gt = np.reshape(N_gt, (rps.height*rps.width, 3))    # reshape as a normal array (p \times 3)
 
 angular_err = psutil.evaluate_angular_error(N_gt, rps.N, rps.background_ind)    # compute angular error
